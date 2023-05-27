@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:gym_workout/features/data/hive_database.dart';
 import 'package:gym_workout/features/models/exercises.dart';
 import 'package:gym_workout/features/models/workout.dart';
+import 'package:provider/provider.dart';
 
 class WorkoutPlan extends ChangeNotifier {
+  final db = HiveDatabase();
+
   List<Workout> workoutPlan = [
     Workout(
       name: 'Upper Body',
@@ -28,6 +32,15 @@ class WorkoutPlan extends ChangeNotifier {
     ),
   ];
 
+  // czy sa jakies cwiczenia w bazie danych
+  void initalizeWorkoutLIst() {
+    if (db.previousDataExists()) {
+      workoutPlan = db.readFromDataBase();
+    } else {
+      db.saveToDatebase(workoutPlan);
+    }
+  }
+
   //zrob liste planu cwiczen
 
   List<Workout> getWorkoutList() {
@@ -49,6 +62,8 @@ class WorkoutPlan extends ChangeNotifier {
     workoutPlan.add(Workout(name: name, exercises: []));
 
     notifyListeners();
+    //zapisz do bazy danych
+    db.saveToDatebase(workoutPlan);
   }
 
   // dodaj cwiczenie do planu
@@ -56,7 +71,6 @@ class WorkoutPlan extends ChangeNotifier {
   void addExercise(
     String workoutName,
     String exerciseName,
-    String name,
     String weight,
     String reps,
     String sets,
@@ -73,6 +87,25 @@ class WorkoutPlan extends ChangeNotifier {
       ),
     );
     notifyListeners();
+
+    //zapisz do bazy danych
+    db.saveToDatebase(workoutPlan);
+  }
+  //usun cwiczenie
+
+  void deleteExercise(String workoutName, String exerciseName) {
+    // Znajdź odpowiednie ćwiczenie w planie
+    Workout relevantWorkout = getRelevantWorkout(workoutName);
+    int index = relevantWorkout.exercises
+        .indexWhere((exercise) => exercise.name == exerciseName);
+
+    if (index != -1) {
+      // Usuń ćwiczenie z planu
+      relevantWorkout.exercises.removeAt(index);
+      notifyListeners();
+       //zapisz do bazy danych
+    db.saveToDatebase(workoutPlan);
+    }
   }
 
   // odznacz cwiczenie
@@ -85,6 +118,9 @@ class WorkoutPlan extends ChangeNotifier {
     relevantExercise.isCompleted = !relevantExercise.isCompleted;
 
     notifyListeners();
+
+    //zapisz do bazy danych
+    db.saveToDatebase(workoutPlan);
   }
 
   // zwroc odpowieni plan
