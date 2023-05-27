@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_workout/components/exercise_tile.dart';
 import 'package:provider/provider.dart';
 
 import '../data/workout_data.dart';
@@ -19,47 +20,27 @@ class _WorkoutPageState extends State<WorkoutPage> {
         appBar: AppBar(title: Text(widget.workoutName)),
         body: ListView.builder(
           itemCount: value.numberOfExInWorkout(widget.workoutName),
-          itemBuilder: ((context, index) => ListTile(
-                title: Text(
-                  value
-                      .getRelevantWorkout(widget.workoutName)
-                      .exercises[index]
-                      .name,
-                ),
-                subtitle: Row(
-                  children: [
-                    //weight
-                    Chip(
-                      label: Text(
-                        value
-                                .getRelevantWorkout(widget.workoutName)
-                                .exercises[index]
-                                .weight +
-                            "kg",
-                      ),
-                    ),
-                    //reps
-                    Chip(
-                      label: Text(
-                        value
-                                .getRelevantWorkout(widget.workoutName)
-                                .exercises[index]
-                                .reps +
-                            " powtórzeń",
-                      ),
-                    ),
-                    //sets
-                    Chip(
-                      label: Text(
-                        value
-                                .getRelevantWorkout(widget.workoutName)
-                                .exercises[index]
-                                .sets +
-                            " serii",
-                      ),
-                    ),
-                  ],
-                ),
+          itemBuilder: ((context, index) => ExerciseTile(
+                exerciseName: value
+                    .getRelevantWorkout(widget.workoutName)
+                    .exercises[index]
+                    .name,
+                weight: value
+                    .getRelevantWorkout(widget.workoutName)
+                    .exercises[index]
+                    .weight,
+                reps: value
+                    .getRelevantWorkout(widget.workoutName)
+                    .exercises[index]
+                    .reps,
+                sets: value
+                    .getRelevantWorkout(widget.workoutName)
+                    .exercises[index]
+                    .sets,
+                isCompleted: value
+                    .getRelevantWorkout(widget.workoutName)
+                    .exercises[index]
+                    .isCompleted,
               )),
         ),
       ),

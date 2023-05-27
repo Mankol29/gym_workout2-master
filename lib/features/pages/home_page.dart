@@ -108,65 +108,63 @@ class _HomePageState extends State<HomePage> {
             ),
             Consumer<WorkoutPlan>(
               builder: (context, value, child) => SizedBox(
-                height: MediaQuery.of(context).size.height -150,
+                height: MediaQuery.of(context).size.height - 150,
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: value.getWorkoutList().length,
                   itemBuilder: (context, index) => ListTile(
-                    title: Dismissible(
-  key: Key(value.getWorkoutList()[index].name),
-  onDismissed: (direction) {
-    // Wywołane po usunięciu wiersza
-    // Tutaj możesz umieścić kod usuwający wiersz z listy
-  },
-  background: Container(
-    color: Colors.red,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: const [
-        Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: Icon(
-            Icons.delete,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    ),
-  ),
-  child: Container(
-    color: Colors.white54,
-    child: Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              value.getWorkoutList()[index].name,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          color: Colors.white54,
-          child: IconButton(
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.black,
-            ),
-            onPressed: () => workoutPage(value.getWorkoutList()[index].name),
-          ),
-        ),
-      ],
-    ),
-  ),
-)
-
-
-                  ),
+                      title: Dismissible(
+                    key: Key(value.getWorkoutList()[index].name),
+                    onDismissed: (direction) {
+                      // Wywołane po usunięciu wiersza
+                      // Tutaj możesz umieścić kod usuwający wiersz z listy
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(left: 20.0),
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: Container(
+                      color: Colors.white54,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Text(
+                                value.getWorkoutList()[index].name,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            color: Colors.white54,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.black,
+                              ),
+                              onPressed: () => workoutPage(
+                                  value.getWorkoutList()[index].name),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
                 ),
               ),
             ),
@@ -185,23 +183,27 @@ class TopBarADDorSELECT extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget> [ 
+      children: <Widget>[
         Text(
-        'Add or Sellect your own plan for today',
-        style: GoogleFonts.bebasNeue(
-          textStyle: const TextStyle(color: Colors.white),
-          fontSize: 16,foreground: Paint()..style= PaintingStyle.stroke..strokeWidth = 2..color= Colors.black,
-          fontWeight: FontWeight.bold,
+          'Add or Sellect your own plan for today',
+          style: GoogleFonts.bebasNeue(
+            textStyle: const TextStyle(color: Colors.white),
+            fontSize: 16,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 4
+              ..color = Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-       Text(
-       'Add or Sellect your own plan for today',
-         style: GoogleFonts.bebasNeue(
-          textStyle: const TextStyle(color: Colors.white),
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-         ),
-       ),
+        Text(
+          'Add or Sellect your own plan for today',
+          style: GoogleFonts.bebasNeue(
+            textStyle: const TextStyle(color: Colors.white),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }
