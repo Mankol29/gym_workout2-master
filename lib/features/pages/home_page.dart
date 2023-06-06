@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_workout/features/data/workout_data.dart';
+import 'package:gym_workout/features/models/workout.dart';
 import 'package:provider/provider.dart';
 
 import 'workout_page.dart';
@@ -9,16 +10,34 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
+  List<Workout> workoutList = [];
 
-    Provider.of<WorkoutPlan>(context, listen: false).initalizeWorkoutLIst();
+  void deleteWorkout(String workoutName) {
+    Provider.of<WorkoutPlan>(context, listen: false).deleteWorkout(workoutName);
+
+    setState(() {
+      workoutList.removeWhere((workout) => workout.name == workoutName);
+    });
   }
+
+// class HomePage extends StatefulWidget {
+//   const HomePage({super.key});
+
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+
+// class _HomePageState extends State<HomePage> {
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   Provider.of<WorkoutPlan>(context, listen: false).initalizeWorkoutLIst();
+//   }
 
   // text controller
   final newWorkoutSaveController = TextEditingController();
@@ -123,8 +142,7 @@ class _HomePageState extends State<HomePage> {
                       title: Dismissible(
                     key: Key(value.getWorkoutList()[index].name),
                     onDismissed: (direction) {
-                      // Wywołane po usunięciu wiersza
-                      // Tutaj możesz umieścić kod usuwający wiersz z listy
+                      deleteWorkout(value.getWorkoutList()[index].name);
                     },
                     background: Container(
                       color: Colors.red,

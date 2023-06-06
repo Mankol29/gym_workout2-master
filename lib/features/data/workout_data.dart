@@ -108,6 +108,17 @@ class WorkoutPlan extends ChangeNotifier {
     }
   }
 
+  void deleteWorkout(String workoutName) {
+  int index = workoutPlan.indexWhere((workout) => workout.name == workoutName);
+
+  if (index != -1) {
+    workoutPlan.removeAt(index);
+    notifyListeners();
+    db.saveToDatebase(workoutPlan);
+  }
+}
+
+
   // odznacz cwiczenie
 
   void checkExercise(String workoutName, String exerciseName) {
