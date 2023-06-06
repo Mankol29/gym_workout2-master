@@ -9,7 +9,7 @@ void main() async {
   //hive
   await Hive.initFlutter();
 // hive box
-  await Hive.openBox("workoutPlan_database");
+  await Hive.openBox("workoutPlan_database1");
 
   runApp(const MyApp());
 }

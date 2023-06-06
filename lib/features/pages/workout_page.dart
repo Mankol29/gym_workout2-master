@@ -6,10 +6,10 @@ import '../data/workout_data.dart';
 
 class WorkoutPage extends StatefulWidget {
   final String workoutName;
-  const WorkoutPage({super.key, required this.workoutName});
+  const WorkoutPage({Key? key, required this.workoutName}) : super(key: key);
 
   @override
-  State<WorkoutPage> createState() => _WorkoutPageState();
+  _WorkoutPageState createState() => _WorkoutPageState();
 }
 
 class _WorkoutPageState extends State<WorkoutPage> {
@@ -23,7 +23,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   final repsController = TextEditingController();
   final setsController = TextEditingController();
 
-  // okno do dodawania cwiczenia
+  // Okno do dodawania ćwiczenia
   void createNewExercise() {
     showDialog(
       context: context,
@@ -32,7 +32,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            //exercise name
+            // Nazwa ćwiczenia
             TextField(
               controller: exerciseNameController,
               decoration: InputDecoration(hintText: "Nazwa ćwiczenia"),
@@ -58,13 +58,13 @@ class _WorkoutPageState extends State<WorkoutPage> {
           ],
         ),
         actions: [
-          // save
+          // Zapisz
           MaterialButton(
             onPressed: save,
             child: const Text('Save'),
           ),
 
-          //cancel
+          // Anuluj
           MaterialButton(
             onPressed: cancel,
             child: const Text('Cancel'),
@@ -74,14 +74,14 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
-// save workout
+  // Zapisz trening
   void save() {
-    // get exercise name from controller
+    // Pobierz nazwę ćwiczenia z kontrolera
     String newExerciseName = exerciseNameController.text;
     String weight = weightController.text;
     String reps = repsController.text;
     String sets = setsController.text;
-    //add exercise
+    // Dodaj ćwiczenie
     Provider.of<WorkoutPlan>(context, listen: false).addExercise(
       widget.workoutName,
       newExerciseName,
@@ -90,19 +90,19 @@ class _WorkoutPageState extends State<WorkoutPage> {
       sets,
     );
 
-    // pop of dialog
+    // Zamknij okno dialogowe
     Navigator.pop(context);
     clear();
   }
 
-  // cancel workout
+  // Anuluj trening
   void cancel() {
-    // pop of dioalog
+    // Zamknij okno dialogowe
     Navigator.pop(context);
     clear();
   }
 
-  // clear dialog
+  // Wyczyść zawartość dialogu
   void clear() {
     exerciseNameController.clear();
     weightController.clear();
@@ -118,41 +118,53 @@ class _WorkoutPageState extends State<WorkoutPage> {
           backgroundColor: Colors.green[700],
           title: Text(widget.workoutName),
         ),
+        resizeToAvoidBottomInset:
+            false, // Zapobiegaj przesuwaniu się obrazka po wysunięciu klawiatury
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: createNewExercise,
         ),
-        body: ListView.builder(
-          itemCount: value.numberOfExInWorkout(widget.workoutName),
-          itemBuilder: ((context, index) => ExerciseTile(
-                exerciseName: value
-                    .getRelevantWorkout(widget.workoutName)
-                    .exercises[index]
-                    .name,
-                weight: value
-                    .getRelevantWorkout(widget.workoutName)
-                    .exercises[index]
-                    .weight,
-                reps: value
-                    .getRelevantWorkout(widget.workoutName)
-                    .exercises[index]
-                    .reps,
-                sets: value
-                    .getRelevantWorkout(widget.workoutName)
-                    .exercises[index]
-                    .sets,
-                isCompleted: value
-                    .getRelevantWorkout(widget.workoutName)
-                    .exercises[index]
-                    .isCompleted,
-                onCheckBoxChanged: (val) => onCheckBoxChanged(
-                  widget.workoutName,
-                  value
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'images/gym-workout-page.jpg'), // Ścieżka do obrazu tła
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: ListView.builder(
+            itemCount: value.numberOfExInWorkout(widget.workoutName),
+            itemBuilder: ((context, index) => ExerciseTile(
+                  exerciseName: value
                       .getRelevantWorkout(widget.workoutName)
                       .exercises[index]
                       .name,
-                ), workoutName: widget.workoutName,
-              )),
+                  weight: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .exercises[index]
+                      .weight,
+                  reps: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .exercises[index]
+                      .reps,
+                  sets: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .exercises[index]
+                      .sets,
+                  isCompleted: value
+                      .getRelevantWorkout(widget.workoutName)
+                      .exercises[index]
+                      .isCompleted,
+                  onCheckBoxChanged: (val) => onCheckBoxChanged(
+                    widget.workoutName,
+                    value
+                        .getRelevantWorkout(widget.workoutName)
+                        .exercises[index]
+                        .name,
+                  ),
+                  workoutName: widget.workoutName,
+                )),
+          ),
         ),
       ),
     );

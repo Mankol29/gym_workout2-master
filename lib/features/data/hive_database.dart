@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveDatabase {
 // references hivebox
-  final _myBox = Hive.box('workoutPlan_database');
+  final _myBox = Hive.box('workoutPlan_database1');
 
 // chceck if there is already data stored, if not, record start date
   bool previousDataExists() {

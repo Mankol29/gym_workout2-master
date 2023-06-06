@@ -39,44 +39,51 @@ class ExerciseTile extends StatelessWidget {
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.symmetric(horizontal: 16.0),
       ),
-      child: Container(
-        color: Colors.green,
-        child: ListTile(
-          title: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(exerciseName),
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(
+                0.5), // Ustaw biały kolor z poziomem przezroczystości 0.5
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: ListTile(
+            title: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Text(exerciseName),
+              ),
             ),
-          ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //weight
-              Chip(
-                label: Text(
-                  "${weight}kg",
+            subtitle: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //weight
+                Chip(
+                  label: Text(
+                    "${weight}kg",
+                  ),
                 ),
-              ),
-              //reps
-              Chip(
-                label: Text(
-                  "$reps  powtórzeń",
+                //reps
+                Chip(
+                  label: Text(
+                    "$reps powtórzeń",
+                  ),
                 ),
-              ),
-              //sets
-              Chip(
-                label: Text(
-                  "$sets  serii",
+                //sets
+                Chip(
+                  label: Text(
+                    "$sets serii",
+                  ),
                 ),
-              ),
-            ],
-          ),
-          trailing: Checkbox(
-            checkColor: Colors.white,
-            fillColor:
-                MaterialStateProperty.resolveWith((states) => Colors.black),
-            value: isCompleted,
-            onChanged: (value) => onCheckBoxChanged!(value),
+              ],
+            ),
+            trailing: Checkbox(
+              checkColor: Colors.white,
+              fillColor:
+                  MaterialStateProperty.resolveWith((states) => Colors.black),
+              value: isCompleted,
+              onChanged: (value) => onCheckBoxChanged!(value),
+            ),
           ),
         ),
       ),
