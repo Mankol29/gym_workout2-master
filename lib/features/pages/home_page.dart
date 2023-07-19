@@ -114,7 +114,10 @@ class _HomePageState extends State<HomePage> {
                         deleteWorkout(value.getWorkoutList()[index].name);
                       },
                       background: Container(
-                        color: Colors.red,
+                        decoration: BoxDecoration(
+borderRadius: BorderRadius.circular(30.0),color: Colors.red,
+              ),
+                        
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: const [
@@ -129,7 +132,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       child: Container(
-                        color: Colors.white54,
+                        decoration: BoxDecoration(
+borderRadius: BorderRadius.circular(30.0),
+                        color: Colors.white54,),
                         child: Row(
                           children: [
                             Expanded(
@@ -145,7 +150,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Container(
-                              color: Colors.white54,
+                              decoration: BoxDecoration(
+borderRadius: BorderRadius.circular(30.0),
+                              color: Colors.white54,),
                               child: IconButton(
                                 icon: Icon(
                                   Icons.arrow_forward_ios,

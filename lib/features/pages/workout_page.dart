@@ -123,6 +123,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: createNewExercise,
+          backgroundColor: Colors.green,
         ),
         body: Container(
           decoration: BoxDecoration(

@@ -25,64 +25,78 @@ class ExerciseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: Key(exerciseName),
-      direction: DismissDirection.startToEnd,
-      onDismissed: (direction) {
-        // Usuń ćwiczenie z listy (przykład z użyciem dostawcy danych)
-        Provider.of<WorkoutPlan>(context, listen: false)
-            .deleteExercise(workoutName, exerciseName);
-      },
-      background: Container(
-        color: Colors.red,
-        child: Icon(Icons.delete, color: Colors.white),
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(
-                0.5), // Ustaw biały kolor z poziomem przezroczystości 0.5
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          child: ListTile(
-            title: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Text(exerciseName),
+    return Container(
+      child: ListTile(
+        title:  Dismissible(
+          key: Key(exerciseName),
+          direction: DismissDirection.startToEnd,
+          onDismissed: (direction) {
+            // Usuń ćwiczenie z listy (przykład z użyciem dostawcy danych)
+            Provider.of<WorkoutPlan>(context, listen: false)
+                .deleteExercise(workoutName, exerciseName);
+          },
+          background: Container(decoration: BoxDecoration(
+borderRadius: BorderRadius.circular(30.0),
+                            color: Colors.red,),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 20.0),
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(
+                    0.5), // Ustaw biały kolor z poziomem przezroczystości 0.5
+                borderRadius: BorderRadius.circular(30.0),
               ),
-            ),
-            subtitle: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //weight
-                Chip(
-                  label: Text(
-                    "${weight}kg",
+              child: ListTile(
+                title: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Text(exerciseName),
                   ),
                 ),
-                //reps
-                Chip(
-                  label: Text(
-                    "$reps powtórzeń",
-                  ),
+                subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //weight
+                    Chip(
+                      label: Text(
+                        "${weight}kg",
+                      ),
+                    ),
+                    //reps
+                    Chip(
+                      label: Text(
+                        "$reps powtórzeń",
+                      ),
+                    ),
+                    //sets
+                    Chip(
+                      label: Text(
+                        "$sets serii",
+                      ),
+                    ),
+                  ],
                 ),
-                //sets
-                Chip(
-                  label: Text(
-                    "$sets serii",
-                  ),
+                trailing: Checkbox(
+                  checkColor: Colors.white,
+                  fillColor:
+                      MaterialStateProperty.resolveWith((states) => Colors.black),
+                  value: isCompleted,
+                  onChanged: (value) => onCheckBoxChanged!(value),
                 ),
-              ],
-            ),
-            trailing: Checkbox(
-              checkColor: Colors.white,
-              fillColor:
-                  MaterialStateProperty.resolveWith((states) => Colors.black),
-              value: isCompleted,
-              onChanged: (value) => onCheckBoxChanged!(value),
+              ),
             ),
           ),
         ),
