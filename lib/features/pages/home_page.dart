@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_workout/features/data/workout_data.dart';
+import 'package:gym_workout/features/models/drawer.dart';
 import 'package:gym_workout/features/models/workout.dart';
 import 'package:provider/provider.dart';
 
@@ -81,6 +82,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: const Text('Your training'),
       ),
+      drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: createNewWorkout,
         backgroundColor: Colors.green[700],

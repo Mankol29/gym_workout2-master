@@ -29,15 +29,14 @@ class WorkoutPlan extends ChangeNotifier {
 
   Future<void> deleteExercise(String workoutName, String exerciseName) async {
     Workout relevantWorkout = getRelevantWorkout(workoutName);
-    relevantWorkout.exercises
-        .removeWhere((exercise) => exercise.name == exerciseName);
-    db.saveToDatebase(workoutPlan);
+    relevantWorkout.exercises.removeWhere((exercise) => exercise.name == exerciseName);
+    db.saveToDatebase(workoutPlan, '', '', '', ''); // Empty strings for user profile info
     notifyListeners();
   }
 
   Future<void> deleteWorkout(String workoutName) async {
     workoutPlan.removeWhere((workout) => workout.name == workoutName);
-    db.saveToDatebase(workoutPlan);
+    db.saveToDatebase(workoutPlan, '', '', '', ''); // Empty strings for user profile info
     notifyListeners();
   }
 
@@ -45,31 +44,28 @@ class WorkoutPlan extends ChangeNotifier {
     Exercises relevantExercise = getRelevantExercise(workoutName, exerciseName);
     relevantExercise.isCompleted = !relevantExercise.isCompleted;
     notifyListeners();
-    db.saveToDatebase(workoutPlan);
+    db.saveToDatebase(workoutPlan, '', '', '', ''); // Empty strings for user profile info
   }
 
   Workout getRelevantWorkout(String workoutName) {
-    Workout relevantWorkout =
-        workoutPlan.firstWhere((workout) => workout.name == workoutName);
+    Workout relevantWorkout = workoutPlan.firstWhere((workout) => workout.name == workoutName);
     return relevantWorkout;
   }
 
   Exercises getRelevantExercise(String workoutName, String exerciseName) {
     Workout relevantWorkout = getRelevantWorkout(workoutName);
-    Exercises relevantExercise = relevantWorkout.exercises
-        .firstWhere((exercise) => exercise.name == exerciseName);
+    Exercises relevantExercise = relevantWorkout.exercises.firstWhere((exercise) => exercise.name == exerciseName);
     return relevantExercise;
   }
 
   void addWorkout(String workoutName) {
     Workout newWorkout = Workout(name: workoutName, exercises: []);
     workoutPlan.add(newWorkout);
-    db.saveToDatebase(workoutPlan);
+    db.saveToDatebase(workoutPlan, '', '', '', ''); // Empty strings for user profile info
     notifyListeners();
   }
 
-  void addExercise(String workoutName, String exerciseName, String weight,
-      String reps, String sets) {
+  void addExercise(String workoutName, String exerciseName, String weight, String reps, String sets) {
     Exercises newExercise = Exercises(
       name: exerciseName,
       weight: weight,
@@ -79,7 +75,7 @@ class WorkoutPlan extends ChangeNotifier {
     );
     Workout relevantWorkout = getRelevantWorkout(workoutName);
     relevantWorkout.exercises.add(newExercise);
-    db.saveToDatebase(workoutPlan);
+    db.saveToDatebase(workoutPlan, '', '', '', ''); // Empty strings for user profile info
     notifyListeners();
   }
 }

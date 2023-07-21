@@ -4,43 +4,67 @@ import 'package:gym_workout/features/models/workout.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveDatabase {
-// references hivebox
   final _myBox = Hive.box('workoutPlan_database1');
 
-// chceck if there is already data stored, if not, record start date
   bool previousDataExists() {
     if (_myBox.isEmpty) {
-      print('previous data does not exists');
+      print('previous data does not exist');
       _myBox.put("START_DATE", todaysDateYYYYMMDD());
       return false;
     } else {
-      print("previous data does  exists");
+      print("previous data does exist");
       return true;
     }
   }
 
-// return staret datae as yyyymmdd
   String getStartDate() {
     return _myBox.get("START_DATE");
   }
 
-// write data
-  void saveToDatebase(List<Workout> workouts) {
+   void saveProfileData(String fullName, String email, String password, String location) {
+    final profileBox = Hive.box('profile_data');
+    profileBox.put('FULL_NAME', fullName);
+    profileBox.put('EMAIL', email);
+    profileBox.put('PASSWORD', password);
+    profileBox.put('LOCATION', location);
+  }
+  
+
+  Map<String, dynamic> getProfileData() {
+    final profileBox = Hive.box('profile_data');
+    return {
+      'fullName': profileBox.get('FULL_NAME', defaultValue: ''),
+      'email': profileBox.get('EMAIL', defaultValue: ''),
+      'password': profileBox.get('PASSWORD', defaultValue: ''),
+      'location': profileBox.get('LOCATION', defaultValue: ''),
+    };
+  }
+
+  void saveToDatebase(
+    List<Workout> workouts,
+    String fullName,
+    String email,
+    String password,
+    String location,
+  ) {
     final workoutList = convertObjectToWorkoutList(workouts);
     final exerciseList = convertObjectToExerciseList(workouts);
 
-    // check if any exercises have been done
     if (exerciseCompleted(workouts)) {
       _myBox.put("COMPLETION_STATUS_" + todaysDateYYYYMMDD(), 1);
     } else {
       _myBox.put("COMPLETION_STATUS_" + todaysDateYYYYMMDD(), 0);
     }
-    //save it into hive
+
+    _myBox.put("FULL_NAME", fullName);
+    _myBox.put("EMAIL", email);
+    _myBox.put("PASSWORD", password);
+    _myBox.put("LOCATION", location);
+
     _myBox.put("WORKOUTS", workoutList);
     _myBox.put("EXERCISES", exerciseList);
   }
 
-//read data and return a list of workouts
   List<Workout> readFromDataBase() {
     List<Workout> mySavedWorkouts = [];
 
@@ -77,7 +101,6 @@ class HiveDatabase {
     return mySavedWorkouts;
   }
 
-// check if any exercises is done
   bool exerciseCompleted(List<Workout> workouts) {
     for (var workout in workouts) {
       for (var exercise in workout.exercises) {
@@ -89,14 +112,12 @@ class HiveDatabase {
     return false;
   }
 
-//return completion status of a given date yyyymmdd
   int getCompletionStatus(String yyyymmdd) {
     int completionStatus = _myBox.get("COMPLETION_STATUS_" + yyyymmdd) ?? 0;
     return completionStatus;
   }
 }
 
-//converts workout objects into a list
 List<String> convertObjectToWorkoutList(List<Workout> workouts) {
   List<String> workoutList = [];
 
@@ -108,15 +129,13 @@ List<String> convertObjectToWorkoutList(List<Workout> workouts) {
   return workoutList;
 }
 
-//converts the exercises in a workout object into a list of strings
 List<List<List<String>>> convertObjectToExerciseList(List<Workout> workouts) {
   List<List<List<String>>> exerciseList = [];
-  // go through each workout
+
   for (int i = 0; i < workouts.length; i++) {
-    //get exercises from each workout
     List<Exercises> exercisesInWorkout = workouts[i].exercises;
     List<List<String>> individualWorkout = [];
-    // go through each execises in ExerciseLIst
+
     for (int j = 0; j < exercisesInWorkout.length; j++) {
       List<String> individualExercise = [];
       individualExercise.addAll(
