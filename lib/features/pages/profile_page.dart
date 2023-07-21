@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gym_workout/features/data/hive_database.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:flutter/material.dart';
+import 'package:gym_workout/features/data/hive_database.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 void main() async {
   // Initialize Hive and open the boxes
   await Hive.initFlutter();
@@ -29,6 +33,27 @@ class _ProfilePageState extends State<ProfilePage> {
   final appBarTitleController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    loadProfileData(); // Wczytaj dane profilu przy inicjalizacji widoku
+  }
+
+  void loadProfileData() async {
+    // Wczytaj dane profilu z bazy danych Hive
+    Map<String, dynamic> profileData = HiveDatabase().getProfileData();
+
+    setState(() {
+      FullName.text = profileData['fullName'];
+      Email.text = profileData['email'];
+      Password.text = profileData['password'];
+      Location.text = profileData['location'];
+      appBarTitleController.text = profileData['fullName'];
+    });
+  }
+
+  
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context); // Go back to the homepage
+           _goBack(); // Go back to the homepage
           },
         ),
         actions: [
@@ -50,16 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
               color: Colors.black,
             ),
             onPressed: () {
-              // Save the user profile information to Hive
-              HiveDatabase().saveProfileData(
-                FullName.text,
-                Email.text,
-                Password.text,
-                Location.text,
-              );
-
-              // Go back to the homepage
-              Navigator.pop(context);
+              _saveProfileData();
             },
           ),
           IconButton(
@@ -68,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.pop(context); // Go back to the homepage
+              _goBack(); // Go back to the homepage
             },
           ),
         ],
@@ -141,8 +157,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void onSaveProfileData() {
-    // Save the user profile information to Hive
+  // Method to save profile data to Hive and update the app bar title
+  void _saveProfileData() {
     HiveDatabase().saveProfileData(
       FullName.text,
       Email.text,
@@ -153,7 +169,13 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       appBarTitleController.text = FullName.text;
     });
+    _goBack();
   }
+
+  void _goBack() {
+    Navigator.pop(context);
+  }
+
 
   Widget buildTextField(String labelText, TextEditingController controller, bool isPasswordTextField) {
     return Padding(

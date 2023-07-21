@@ -16,6 +16,15 @@ class HiveDatabase {
       return true;
     }
   }
+  Future<List<String>> readProfileData() async {
+    final profileBox = Hive.box('profile_data');
+    List<String> profileData = [];
+    profileData.add(profileBox.get('FULL_NAME', defaultValue: ''));
+    profileData.add(profileBox.get('EMAIL', defaultValue: ''));
+    profileData.add(profileBox.get('PASSWORD', defaultValue: ''));
+    profileData.add(profileBox.get('LOCATION', defaultValue: ''));
+    return profileData;
+  }
 
   String getStartDate() {
     return _myBox.get("START_DATE");
