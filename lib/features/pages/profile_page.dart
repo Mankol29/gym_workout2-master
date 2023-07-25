@@ -58,6 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitleController.text),
+        centerTitle: true,
         backgroundColor: Colors.black54,
         leading: IconButton(
           icon: const Icon(
@@ -175,7 +176,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void _goBack() {
     Navigator.pop(context);
   }
-
 
   Widget buildTextField(String labelText, TextEditingController controller, bool isPasswordTextField) {
     return Padding(

@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:gym_workout/features/data/hive_database.dart';
+import 'package:hive/hive.dart';
 
 class ProfilAcc extends ChangeNotifier {
   final db = HiveDatabase();
 
-  String fullName= '';
+  String fullName = '';
   String email = '';
   String password = '';
   String location = '';

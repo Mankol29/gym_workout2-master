@@ -117,6 +117,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         appBar: AppBar(
           backgroundColor: Colors.green[700],
           title: Text(widget.workoutName),
+          centerTitle: true,
         ),
         resizeToAvoidBottomInset:
             false, // Zapobiegaj przesuwaniu się obrazka po wysunięciu klawiatury
