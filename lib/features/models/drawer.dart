@@ -3,6 +3,7 @@ import 'package:gym_workout/features/pages/profile_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,7 @@ class MyDrawer extends StatelessWidget {
       backgroundColor: Colors.green[900],
       child:  Column(
         children: [
-         const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: DrawerHeader(
               child: CircleAvatar(
