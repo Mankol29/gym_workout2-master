@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
             Container(
               height: MediaQuery.of(context).size.height * 0.07,
               color: const Color.fromARGB(160, 55, 116, 57),
-              child: Center(
+              child: const Center(
                 child: TopBarADDorSELECT(),
               ),
             ),
@@ -117,12 +117,12 @@ class _HomePageState extends State<HomePage> {
                       },
                       background: Container(
                         decoration: BoxDecoration(
-borderRadius: BorderRadius.circular(30.0),color: Colors.red,
+                      borderRadius: BorderRadius.circular(30.0),color: Colors.red,
               ),
                         
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
+                          children:  [
                             Padding(
                               padding: EdgeInsets.only(left: 20.0),
                               child: Icon(
@@ -135,7 +135,7 @@ borderRadius: BorderRadius.circular(30.0),color: Colors.red,
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-borderRadius: BorderRadius.circular(30.0),
+                      borderRadius: BorderRadius.circular(30.0),
                         color: Colors.white54,),
                         child: Row(
                           children: [
@@ -153,10 +153,10 @@ borderRadius: BorderRadius.circular(30.0),
                             ),
                             Container(
                               decoration: BoxDecoration(
-borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(30.0),
                               color: Colors.white54,),
                               child: IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.arrow_forward_ios,
                                   color: Colors.black,
                                 ),

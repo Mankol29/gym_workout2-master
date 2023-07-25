@@ -12,7 +12,7 @@ void main() async {
   await Hive.openBox('profile_data');
   await Hive.openBox('workoutPlan_database1');
 
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: ProfilePage(),
   ));
 }
@@ -113,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                         shape: BoxShape.circle,
-                        image: DecorationImage(
+                        image: const DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(
                             'https://cdn.pixabay.com/photo/2023/06/27/10/51/man-8091933_1280.jpg',
@@ -135,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           color: Colors.grey[900],
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
                           color: Colors.white,
                         ),
@@ -149,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
               buildTextField('Email', Email, false),
               buildTextField('Password', Password, true),
               buildTextField("Location", Location, false),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -179,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildTextField(String labelText, TextEditingController controller, bool isPasswordTextField) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 30),
+      padding: const EdgeInsets.only(bottom: 30),
       child: TextField(
         controller: controller,
         obscureText: isPasswordTextField ? isObscurePassword : false,

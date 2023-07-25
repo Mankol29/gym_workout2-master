@@ -38,9 +38,9 @@ class ExerciseTile extends StatelessWidget {
           background: Container(decoration: BoxDecoration(
 borderRadius: BorderRadius.circular(30.0),
                             color: Colors.red,),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
+                              children:  [
                                 Padding(
                                   padding: EdgeInsets.only(left: 20.0),
                                   child: Icon(

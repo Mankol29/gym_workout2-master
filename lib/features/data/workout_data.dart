@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:gym_workout/features/data/hive_database.dart';
 import 'package:gym_workout/features/models/exercises.dart';
 import 'package:gym_workout/features/models/workout.dart';
-import 'package:provider/provider.dart';
 
 class WorkoutPlan extends ChangeNotifier {
   final db = HiveDatabase();
