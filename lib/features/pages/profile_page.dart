@@ -1,24 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:gym_workout/features/data/hive_database.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gym_workout/features/data/account_data.dart';
 import 'package:gym_workout/features/data/hive_database.dart';
+import 'package:gym_workout/features/models/image_picker.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-void main() async {
-  // Initialize Hive and open the boxes
-  await Hive.initFlutter();
-  await Hive.openBox('profile_data');
-  await Hive.openBox('workoutPlan_database1');
-
-  runApp(const MaterialApp(
-    home: ProfilePage(),
-  ));
-}
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  Future<void> saveProfileImage(File imageFile) async {
+    final box = await Hive.openBox('profile_data');
+    final imageBytes = imageFile.readAsBytesSync();
+    await box.put('profile_image', imageBytes);
+  }
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -31,17 +28,16 @@ class _ProfilePageState extends State<ProfilePage> {
   final Password = TextEditingController();
   final Location = TextEditingController();
   final appBarTitleController = TextEditingController();
+  File? imageFile;
 
   @override
   void initState() {
     super.initState();
-    loadProfileData(); // Wczytaj dane profilu przy inicjalizacji widoku
+    loadProfileData(); // Load profile data on initialization
   }
 
   void loadProfileData() async {
-    // Wczytaj dane profilu z bazy danych Hive
     Map<String, dynamic> profileData = HiveDatabase().getProfileData();
-
     setState(() {
       FullName.text = profileData['fullName'];
       Email.text = profileData['email'];
@@ -51,10 +47,10 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
+    final profilAcc = Provider.of<ProfilAcc>(context); // Access the ProfilAcc instance
+    File? imageFile = profilAcc.imageFile; // Get the imageFile from ProfilAcc
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitleController.text),
@@ -66,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Colors.black,
           ),
           onPressed: () {
-           _goBack(); // Go back to the homepage
+            _goBack(); // Go back to the homepage
           },
         ),
         actions: [
@@ -79,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _saveProfileData();
             },
           ),
+          
           IconButton(
             icon: const Icon(
               Icons.close,
@@ -114,11 +111,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                         shape: BoxShape.circle,
-                        image: const DecorationImage(
+                        image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(
-                            'https://cdn.pixabay.com/photo/2023/06/27/10/51/man-8091933_1280.jpg',
-                          ),
+                          image: imageFile != null
+                              ? FileImage(imageFile!) as ImageProvider<Object> // Cast the FileImage to ImageProvider<Object>
+                              : NetworkImage(
+                                  'https://cdn.pixabay.com/photo/2023/06/27/10/51/man-8091933_1280.jpg',
+                                ),
                         ),
                       ),
                     ),
@@ -136,9 +135,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           color: Colors.grey[900],
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
+                        child: ImagePickerWidget(
+                          onImagePicked: (File pickedImage) {
+                            // Update the selected image from the ImagePickerWidget
+                            setState(() {
+                              imageFile = pickedImage;
+                            });
+                          },
                         ),
                       ),
                     ),
@@ -157,6 +160,20 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+  // Method to pick an image
+  void _pickImage() async {
+    final imagePicker = ImagePicker();
+    final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      // Update the selected image from the ImagePickerWidget
+      setState(() {
+        imageFile = File(pickedImage.path);
+      });
+    }
+  }
+  
 
   // Method to save profile data to Hive and update the app bar title
   void _saveProfileData() {
@@ -210,4 +227,45 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  // Method to build the avatar selection row
+Widget buildAvatarSelectionRow(BuildContext context) {
+  final profilAcc = Provider.of<ProfilAcc>(context);
+  final List<String?> avatarUrls = profilAcc.avatarUrls;
+
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      for (int i = 0; i < avatarUrls.length; i++)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                imageFile = null;
+                // Set the selected image as the profile image URL
+                profilAcc.setSelectedAvatarUrl(i, null);
+              });
+            },
+            child: CircleAvatar(
+              backgroundImage: avatarUrls[i] != null
+                  ? NetworkImage(avatarUrls[i]!)
+                  : null,
+              child: avatarUrls[i] == null
+                  ? ImagePickerWidget(
+                      onImagePicked: (File pickedImage) {
+                        // Update the selected image from the ImagePickerWidget
+                        setState(() {
+                          imageFile = pickedImage;
+                        });
+                        // Save the selected image URL in the provider
+                        profilAcc.setSelectedAvatarUrl(i, null);
+                      },
+                    )
+                  : null,
+            ),
+          ),
+        ),
+    ],
+  );
+}
 }
