@@ -1,21 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_workout/features/data/account_data.dart';
 import 'package:gym_workout/features/data/workout_data.dart';
 import 'package:gym_workout/features/models/drawer.dart';
 import 'package:gym_workout/features/models/workout.dart';
+import 'package:gym_workout/features/pages/profile_page.dart';
 import 'package:provider/provider.dart';
 
 import 'workout_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final File? imageFile; // Pass imageFile to the state
 
+  const HomePage({Key? key, this.imageFile}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   List<Workout> workoutList = [];
+    File? _imageFile; // Add this variable to store the imageFile
 
   void deleteWorkout(String workoutName) {
     Provider.of<WorkoutPlan>(context, listen: false).deleteWorkout(workoutName);
@@ -58,6 +64,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+   void _openProfilePage() async {
+    final File? newImageFile = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(),
+      ),
+    );
+
+    // Update the imageFile if a new one is selected
+    if (newImageFile != null) {
+      setState(() {
+        _imageFile = newImageFile;
+      });
+    }
+  }
+
   void save() {
     String newWorkoutSave = newWorkoutSaveController.text;
     Provider.of<WorkoutPlan>(context, listen: false).addWorkout(newWorkoutSave);
@@ -76,13 +98,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final profilAcc = Provider.of<ProfilAcc>(context);
+    File? imageFile = profilAcc.imageFile; // Get the imageFile from ProfilAcc
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green[700],
         centerTitle: true,
         title: const Text('Your training'),
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(imageFile: imageFile),
       floatingActionButton: FloatingActionButton(
         onPressed: createNewWorkout,
         backgroundColor: Colors.green[700],

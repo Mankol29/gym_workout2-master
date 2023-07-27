@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:gym_workout/datetime/date_time.dart';
 import 'package:gym_workout/features/models/exercises.dart';
 import 'package:gym_workout/features/models/workout.dart';
@@ -16,6 +18,7 @@ class HiveDatabase {
       return true;
     }
   }
+  
   Future<List<String>> readProfileData() async {
     final profileBox = Hive.box('profile_data');
     List<String> profileData = [];
@@ -125,7 +128,12 @@ class HiveDatabase {
     int completionStatus = _myBox.get("COMPLETION_STATUS_" + yyyymmdd) ?? 0;
     return completionStatus;
   }
-}
+
+  Future<void> saveProfileImage(List<int> imageBytes) async {
+    final box = await Hive.openBox('profile_data');
+    await box.put('profile_image', imageBytes);
+  }
+
 
 List<String> convertObjectToWorkoutList(List<Workout> workouts) {
   List<String> workoutList = [];
@@ -161,4 +169,5 @@ List<List<List<String>>> convertObjectToExerciseList(List<Workout> workouts) {
     exerciseList.add(individualWorkout);
   }
   return exerciseList;
+}
 }

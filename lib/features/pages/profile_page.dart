@@ -3,13 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gym_workout/features/data/account_data.dart';
 import 'package:gym_workout/features/data/hive_database.dart';
+import 'package:gym_workout/features/models/drawer.dart';
 import 'package:gym_workout/features/models/image_picker.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final File? imageFile;
+
+  ProfilePage({Key? key, this.imageFile,}) : super(key: key);
 
   Future<void> saveProfileImage(File imageFile) async {
     final box = await Hive.openBox('profile_data');
@@ -49,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final profilAcc = Provider.of<ProfilAcc>(context); // Access the ProfilAcc instance
+    final profilAcc = Provider.of<ProfilAcc>(context);
     File? imageFile = profilAcc.imageFile; // Get the imageFile from ProfilAcc
     return Scaffold(
       appBar: AppBar(
@@ -113,11 +116,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: imageFile != null
-                              ? FileImage(imageFile!) as ImageProvider<Object> // Cast the FileImage to ImageProvider<Object>
-                              : NetworkImage(
-                                  'https://cdn.pixabay.com/photo/2023/06/27/10/51/man-8091933_1280.jpg',
-                                ),
+                          image: profilAcc.imageFile != null
+                    ? FileImage(profilAcc.imageFile!) as ImageProvider<Object> // Use the selected image file if available
+                    : imageFile != null // Use the last selected image if no new image is selected
+                        ? FileImage(imageFile!) as ImageProvider<Object>
+                        : NetworkImage(
+                            'https://cdn.pixabay.com/photo/2023/06/27/10/51/man-8091933_1280.jpg',
+                          ),
                         ),
                       ),
                     ),
@@ -137,10 +142,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         child: ImagePickerWidget(
                           onImagePicked: (File pickedImage) {
-                            // Update the selected image from the ImagePickerWidget
+                            // Update the selected image from the ImagePickerWidget and save it to the database
                             setState(() {
                               imageFile = pickedImage;
                             });
+                            profilAcc.saveProfileImage(pickedImage);
                           },
                         ),
                       ),
@@ -187,6 +193,12 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       appBarTitleController.text = FullName.text;
     });
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyDrawer(imageFile: imageFile,),),);
+        
     _goBack();
   }
 
@@ -227,45 +239,4 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-  // Method to build the avatar selection row
-Widget buildAvatarSelectionRow(BuildContext context) {
-  final profilAcc = Provider.of<ProfilAcc>(context);
-  final List<String?> avatarUrls = profilAcc.avatarUrls;
-
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      for (int i = 0; i < avatarUrls.length; i++)
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                imageFile = null;
-                // Set the selected image as the profile image URL
-                profilAcc.setSelectedAvatarUrl(i, null);
-              });
-            },
-            child: CircleAvatar(
-              backgroundImage: avatarUrls[i] != null
-                  ? NetworkImage(avatarUrls[i]!)
-                  : null,
-              child: avatarUrls[i] == null
-                  ? ImagePickerWidget(
-                      onImagePicked: (File pickedImage) {
-                        // Update the selected image from the ImagePickerWidget
-                        setState(() {
-                          imageFile = pickedImage;
-                        });
-                        // Save the selected image URL in the provider
-                        profilAcc.setSelectedAvatarUrl(i, null);
-                      },
-                    )
-                  : null,
-            ),
-          ),
-        ),
-    ],
-  );
-}
 }

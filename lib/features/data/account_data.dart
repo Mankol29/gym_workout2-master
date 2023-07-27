@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gym_workout/features/data/hive_database.dart';
-import 'package:hive/hive.dart';
 
 class ProfilAcc extends ChangeNotifier {
   final db = HiveDatabase();
@@ -37,14 +36,22 @@ class ProfilAcc extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Add a method to set the imageFile property
   void setImageFile(File? file) {
     imageFile = file;
     notifyListeners();
   }
-  // Method to set the selected avatar URL
-  void setSelectedAvatarUrl(int index, String? imageUrl) {
-    avatarUrls[index] = imageUrl;
+
+  // Add the method to save the image to the database
+  Future<void> saveProfileImage(File imageFile) async {
+    // Convert the image to bytes
+    List<int> imageBytes = imageFile.readAsBytesSync();
+
+    // Save the image bytes to the database using Hive
+    await db.saveProfileImage(imageBytes);
+
+    // Update the imageFile with the newly selected image
+    setImageFile(imageFile);
+
     notifyListeners();
   }
 }

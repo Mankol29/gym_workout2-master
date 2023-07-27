@@ -3,7 +3,6 @@ import 'package:gym_workout/features/data/account_data.dart';
 import 'package:gym_workout/features/data/workout_data.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:gym_workout/features/data/hive_database.dart';
 import 'package:gym_workout/features/pages/home_page.dart';
 
 void main() async {
