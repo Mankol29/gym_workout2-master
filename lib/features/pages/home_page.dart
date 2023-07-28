@@ -64,21 +64,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-   void _openProfilePage() async {
-    final File? newImageFile = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ProfilePage(),
-      ),
-    );
-
-    // Update the imageFile if a new one is selected
-    if (newImageFile != null) {
-      setState(() {
-        _imageFile = newImageFile;
-      });
-    }
-  }
 
   void save() {
     String newWorkoutSave = newWorkoutSaveController.text;

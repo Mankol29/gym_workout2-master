@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import '../data/workout_data.dart';
 
 class EditExercisePage extends StatefulWidget {
   final String exerciseName;
@@ -43,8 +40,7 @@ class _EditExercisePageState extends State<EditExercisePage> {
     String newReps = repsController.text;
     String newSets = setsController.text;
 
-    // Call the editExercise method from the WorkoutPage
-    // You can pass the updated details back to the WorkoutPage
+    // Pass the updated exercise details back to the WorkoutPage
     Navigator.pop(context, {
       'exerciseName': newExerciseName,
       'weight': newWeight,
@@ -57,7 +53,7 @@ class _EditExercisePageState extends State<EditExercisePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Exercise'),
+        title: const Text('Edit Exercise'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -66,24 +62,20 @@ class _EditExercisePageState extends State<EditExercisePage> {
           children: [
             Text('Exercise Name: ${widget.exerciseName}'),
             TextField(
-              controller: TextEditingController(text: widget.weight),
-              decoration: InputDecoration(labelText: 'Weight'),
+              controller: weightController,
+              decoration: const InputDecoration(labelText: 'Weight'),
             ),
             TextField(
-              controller: TextEditingController(text: widget.reps),
-              decoration: InputDecoration(labelText: 'Reps'),
+              controller: repsController,
+              decoration: const InputDecoration(labelText: 'Reps'),
             ),
             TextField(
-              controller: TextEditingController(text: widget.sets),
-              decoration: InputDecoration(labelText: 'Sets'),
+              controller: setsController,
+              decoration: const InputDecoration(labelText: 'Sets'),
             ),
             ElevatedButton(
-              onPressed: () {
-                // Save the edited details and pop the page
-                // to go back to the previous workout page.
-                Navigator.pop(context);
-              },
-              child: Text('Save'),
+              onPressed: onSaveButtonPressed,
+              child: const Text('Save'),
             ),
           ],
         ),

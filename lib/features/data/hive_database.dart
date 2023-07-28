@@ -1,11 +1,15 @@
-import 'dart:io';
-
 import 'package:gym_workout/datetime/date_time.dart';
 import 'package:gym_workout/features/models/exercises.dart';
 import 'package:gym_workout/features/models/workout.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveDatabase {
+  static Future<void> init() async {
+    await Hive.initFlutter();
+    await Hive.openBox('workoutPlan_database1');
+    await Hive.openBox('profile_data');
+  }
+  
   final _myBox = Hive.box('workoutPlan_database1');
 
   bool previousDataExists() {
@@ -18,7 +22,36 @@ class HiveDatabase {
       return true;
     }
   }
-  
+    void saveExerciseDetails(List<Workout> workoutPlan) async {
+    // Convert workoutPlan to the format suitable for saving in Hive
+    List<Map<String, dynamic>> workoutList = [];
+    for (var workout in workoutPlan) {
+      List<Map<String, dynamic>> exerciseList = [];
+      for (var exercise in workout.exercises) {
+        exerciseList.add({
+          'name': exercise.name,
+          'weight': exercise.weight,
+          'reps': exercise.reps,
+          'sets': exercise.sets,
+          'isCompleted': exercise.isCompleted,
+        });
+      }
+      workoutList.add({
+        'name': workout.name,
+        'exercises': exerciseList,
+      });    // Save workoutList to the database
+    final box = Hive.box('workoutPlan_database1');
+    await box.put('workoutList', workoutList);
+
+    // Close the box after saving the data
+    await box.close();
+  }
+
+
+    // Save workoutList to the database
+    final myBox = Hive.box('workoutPlan_database1');
+    myBox.put('workoutList', workoutList);
+  }
   Future<List<String>> readProfileData() async {
     final profileBox = Hive.box('profile_data');
     List<String> profileData = [];
@@ -169,5 +202,4 @@ List<List<List<String>>> convertObjectToExerciseList(List<Workout> workouts) {
     exerciseList.add(individualWorkout);
   }
   return exerciseList;
-}
-}
+}}

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../features/data/workout_data.dart';
 
-class ExerciseTile extends StatelessWidget {
+class ExerciseTile extends StatefulWidget {
   final String exerciseName;
   String workoutName;
   final String weight;
@@ -24,78 +23,81 @@ class ExerciseTile extends StatelessWidget {
   });
 
   @override
+  State<ExerciseTile> createState() => _ExerciseTileState();
+}
+
+class _ExerciseTileState extends State<ExerciseTile> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListTile(
-        title:  Dismissible(
-          key: Key(exerciseName),
-          direction: DismissDirection.startToEnd,
-          onDismissed: (direction) {
-            // Usuń ćwiczenie z listy (przykład z użyciem dostawcy danych)
-            Provider.of<WorkoutPlan>(context, listen: false)
-                .deleteExercise(workoutName, exerciseName);
-          },
-          background: Container(decoration: BoxDecoration(
+    return ListTile(
+      title:  Dismissible(
+        key: Key(widget.exerciseName),
+        direction: DismissDirection.startToEnd,
+        onDismissed: (direction) {
+          // Usuń ćwiczenie z listy (przykład z użyciem dostawcy danych)
+          Provider.of<WorkoutPlan>(context, listen: false)
+              .deleteExercise(widget.workoutName, widget.exerciseName);
+        },
+        background: Container(decoration: BoxDecoration(
 borderRadius: BorderRadius.circular(30.0),
-                            color: Colors.red,),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children:  [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 20.0),
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.black,
-                                  ),
+                          color: Colors.red,),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children:  [
+                              Padding(
+                                padding: EdgeInsets.only(left: 20.0),
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.black,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(
-                    0.5), // Ustaw biały kolor z poziomem przezroczystości 0.5
-                borderRadius: BorderRadius.circular(30.0),
+                        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(
+                  0.5), // Ustaw biały kolor z poziomem przezroczystości 0.5
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            child: ListTile(
+              title: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(widget.exerciseName),
+                ),
               ),
-              child: ListTile(
-                title: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Text(exerciseName),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //weight
+                  Chip(
+                    label: Text(
+                      "${widget.weight}kg",
+                    ),
                   ),
-                ),
-                subtitle: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //weight
-                    Chip(
-                      label: Text(
-                        "${weight}kg",
-                      ),
+                  //reps
+                  Chip(
+                    label: Text(
+                      "${widget.reps} powtórzeń",
                     ),
-                    //reps
-                    Chip(
-                      label: Text(
-                        "$reps powtórzeń",
-                      ),
+                  ),
+                  //sets
+                  Chip(
+                    label: Text(
+                      "${widget.sets} serii",
                     ),
-                    //sets
-                    Chip(
-                      label: Text(
-                        "$sets serii",
-                      ),
-                    ),
-                  ],
-                ),
-                trailing: Checkbox(
-                  checkColor: Colors.white,
-                  fillColor:
-                      MaterialStateProperty.resolveWith((states) => Colors.black),
-                  value: isCompleted,
-                  onChanged: (value) => onCheckBoxChanged!(value),
-                ),
+                  ),
+                ],
+              ),
+              trailing: Checkbox(
+                checkColor: Colors.white,
+                fillColor:
+                    MaterialStateProperty.resolveWith((states) => Colors.black),
+                value: widget.isCompleted,
+                onChanged: (value) => widget.onCheckBoxChanged!(value),
               ),
             ),
           ),
