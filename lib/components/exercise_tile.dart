@@ -4,7 +4,7 @@ import '../features/data/workout_data.dart';
 
 class ExerciseTile extends StatefulWidget {
   final String exerciseName;
-  String workoutName;
+  final String workoutName;
   final String weight;
   final String reps;
   final String sets;

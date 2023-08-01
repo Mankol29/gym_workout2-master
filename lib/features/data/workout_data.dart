@@ -77,4 +77,6 @@ class WorkoutPlan extends ChangeNotifier {
     db.saveToDatebase(workoutPlan, '', '', '', ''); // Empty strings for user profile info
     notifyListeners();
   }
+
+  void updateExerciseName(String workoutName, String oldExerciseName, String newExerciseName) {}
 }

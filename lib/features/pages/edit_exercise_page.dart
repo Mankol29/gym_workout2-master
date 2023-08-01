@@ -63,6 +63,10 @@ class _EditExercisePageState extends State<EditExercisePage> {
           children: [
             Text('Exercise Name: ${widget.exerciseName}'),
             TextField(
+              controller: exerciseNameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
               controller: weightController,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: const InputDecoration(labelText: 'Weight'),
