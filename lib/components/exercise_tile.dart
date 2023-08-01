@@ -66,7 +66,7 @@ borderRadius: BorderRadius.circular(30.0),
               title: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(3.0),
-                  child: Text(widget.exerciseName),
+                  child: Text(widget.exerciseName, style: TextStyle(fontWeight: FontWeight.bold),),
                 ),
               ),
               subtitle: Row(
@@ -98,6 +98,7 @@ borderRadius: BorderRadius.circular(30.0),
                     MaterialStateProperty.resolveWith((states) => Colors.black),
                 value: widget.isCompleted,
                 onChanged: (value) => widget.onCheckBoxChanged!(value),
+                
               ),
             ),
           ),
