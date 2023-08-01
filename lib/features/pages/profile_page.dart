@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,13 +8,12 @@ import 'package:gym_workout/features/data/hive_database.dart';
 import 'package:gym_workout/features/models/drawer.dart';
 import 'package:gym_workout/features/models/image_picker.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final File? imageFile;
 
-  ProfilePage({Key? key, this.imageFile,}) : super(key: key);
+  const ProfilePage({Key? key, this.imageFile,}) : super(key: key);
 
   Future<void> saveProfileImage(File imageFile) async {
     final box = await Hive.openBox('profile_data');
@@ -117,10 +118,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: profilAcc.imageFile != null
-                    ? FileImage(profilAcc.imageFile!) as ImageProvider<Object> // Use the selected image file if available
+                    ? FileImage(profilAcc.imageFile!) // Use the selected image file if available
                     : imageFile != null // Use the last selected image if no new image is selected
-                        ? FileImage(imageFile!) as ImageProvider<Object>
-                        : NetworkImage(
+                        ? FileImage(imageFile) as ImageProvider<Object>
+                        : const NetworkImage(
                             'https://cdn.pixabay.com/photo/2023/06/27/10/51/man-8091933_1280.jpg',
                           ),
                         ),
@@ -168,17 +169,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   // Method to pick an image
-  void _pickImage() async {
-    final imagePicker = ImagePicker();
-    final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      // Update the selected image from the ImagePickerWidget
-      setState(() {
-        imageFile = File(pickedImage.path);
-      });
-    }
-  }
   
 
   // Method to save profile data to Hive and update the app bar title

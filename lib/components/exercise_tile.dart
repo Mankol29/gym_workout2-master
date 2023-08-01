@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../features/data/workout_data.dart';
 
+// ignore: must_be_immutable
 class ExerciseTile extends StatefulWidget {
   final String exerciseName;
   final String workoutName;
@@ -66,7 +67,7 @@ borderRadius: BorderRadius.circular(30.0),
               title: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(3.0),
-                  child: Text(widget.exerciseName, style: TextStyle(fontWeight: FontWeight.bold),),
+                  child: Text(widget.exerciseName, style: const TextStyle(fontWeight: FontWeight.bold),),
                 ),
               ),
               subtitle: Row(

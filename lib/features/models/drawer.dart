@@ -29,13 +29,13 @@ class MyDrawer extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(profileData.fullName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20), textAlign: TextAlign.left,),
+                      child: Text(profileData.fullName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20), textAlign: TextAlign.left,),
                     ),
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ProfilePage(), // Pass the ProfilAcc instance here
+                            builder: (context) => const ProfilePage(), // Pass the ProfilAcc instance here
                           ),
                         ).then((_) {
                           // Update the fullName in the drawer header when ProfilePage is popped.

@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gym_workout/components/exercise_tile.dart';
@@ -200,7 +202,7 @@ void onTapExerciseTile(BuildContext context, Exercises exercise) async {
 
     editExercise(
       widget.workoutName,
-      exercise.name, // Use the exercise object from the ExerciseTile
+      newExerciseName,// Use the exercise object from the ExerciseTile
       newWeight,
       newReps,
       newSets,

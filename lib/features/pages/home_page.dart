@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,7 +8,6 @@ import 'package:gym_workout/features/data/account_data.dart';
 import 'package:gym_workout/features/data/workout_data.dart';
 import 'package:gym_workout/features/models/drawer.dart';
 import 'package:gym_workout/features/models/workout.dart';
-import 'package:gym_workout/features/pages/profile_page.dart';
 import 'package:provider/provider.dart';
 
 import 'workout_page.dart';
@@ -21,7 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Workout> workoutList = [];
-    File? _imageFile; // Add this variable to store the imageFile
+// Add this variable to store the imageFile
 
   void deleteWorkout(String workoutName) {
     Provider.of<WorkoutPlan>(context, listen: false).deleteWorkout(workoutName);

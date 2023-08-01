@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gym_workout/features/data/account_data.dart';
@@ -20,7 +22,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       onTap: () {
         _pickImage();
       },
-      child: Icon(
+      child: const Icon(
         Icons.edit,
         color: Colors.white,
       ),
