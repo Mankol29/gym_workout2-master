@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class EditExercisePage extends StatefulWidget {
   final String exerciseName;
@@ -63,14 +64,17 @@ class _EditExercisePageState extends State<EditExercisePage> {
             Text('Exercise Name: ${widget.exerciseName}'),
             TextField(
               controller: weightController,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: const InputDecoration(labelText: 'Weight'),
             ),
             TextField(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: repsController,
               decoration: const InputDecoration(labelText: 'Reps'),
             ),
             TextField(
               controller: setsController,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: const InputDecoration(labelText: 'Sets'),
             ),
             ElevatedButton(
